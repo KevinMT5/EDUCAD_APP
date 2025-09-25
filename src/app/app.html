@@ -1,60 +1,33 @@
-<div class="container mt-4">
-  <h2>Registro de Empleado</h2>
-
-  <form #empleadoForm="ngForm" (ngSubmit)="registrarEmpleado()">
-
-    <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre:</label>
-      <input
-        type="text"
-        id="nombre"
-        class="form-control"
-        required
-        [(ngModel)]="empleado.nombre"
-        name="nombre">
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>{{titulo}}</h1>
     </div>
+    <br>
+    <form action="">
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" [(ngModel)]="nombre" name="nombre">
+      </div>
+      <div class="mb-3">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" class="form-control" id="apellido" [(ngModel)]="apellido" name="apellido">
+      </div>
+      <div class="mb-3">
+        <label for="cargo" class="form-label">Cargo</label>
+        <input type="text" class="form-control" id="cargo" [(ngModel)]="cargo" name="cargo">
+      </div>
+      <div class="mb-3">
+        <label for="salario" class="form-label">Salario</label>
+        <input type="number" class="form-control" id="salario" [(ngModel)]="salario" name="salario">
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="agregarEmpleado()" style="">Agregar Empleado</button>
+    </form>
 
-    <div class="mb-3">
-      <label for="apellido" class="form-label">Apellido:</label>
-      <input
-        type="text"
-        id="apellido"
-        class="form-control"
-        required
-        [(ngModel)]="empleado.apellido"
-        name="apellido">
+    <div class="col">
+      <div *ngFor="let empleado of empleados; let i = index">
+        {{i}} - {{empleado.nombre}} {{empleado.apellido}} - {{empleado.cargo}} - {{empleado.salario}}
+      </div>
     </div>
-
-    <div class="mb-3">
-      <label for="cargo" class="form-label">Cargo:</label>
-      <input
-        type="text"
-        id="cargo"
-        class="form-control"
-        required
-        [(ngModel)]="empleado.cargo"
-        name="cargo">
-    </div>
-
-    <div class="mb-3">
-      <label for="salario" class="form-label">Salario:</label>
-      <input
-        type="number"
-        id="salario"
-        class="form-control"
-        required
-        [(ngModel)]="empleado.salario"
-        name="salario">
-    </div>
-
-    <button type="submit" class="btn btn-primary">Registrar</button>
-  </form>
-
-  <hr>
-
-  <h4>Datos ingresados:</h4>
-  <p><strong>Nombre:</strong> {{ empleado.nombre }}</p>
-  <p><strong>Apellido:</strong> {{ empleado.apellido }}</p>
-  <p><strong>Cargo:</strong> {{ empleado.cargo }}</p>
-  <p><strong>Salario:</strong> {{ empleado.salario }}</p>
+  </div>
 </div>

@@ -1,23 +1,32 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Empleado } from './empleado.model';
-import { RouterOutlet } from '@angular/router';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule],
+  standalone: true,               // ✅ standalone si no usas AppModule
+  imports: [FormsModule, NgForOf],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
 export class App {
+  titulo = 'EDUCADAPP';
 
-  titulo='EDUCADAPP';
+  // propiedades enlazadas con ngModel
+  nombre: string = '';
+  apellido: string = '';
+  cargo: string = '';
+  salario: number = 0;
 
-  empleado:Empleado = new Empleado('','','',0);
+  empleados: Empleado[] = [
+    new Empleado("Juan","Perez","Desarrollador",1200),
+    new Empleado("Ana","Gomez","Diseñadora",1100),
+    new Empleado("Luis","Martinez","Administrador",1300)
+  ];
 
-
-  registrarEmpleado():void{
-    console.log(`Usuario registrado: ${this.empleado.nombre} ${this.empleado.apellido}, Cargo: ${this.empleado.cargo}, Salario: ${this.empleado.salario}`);
-    this.empleado = new Empleado('','','',0);
+  agregarEmpleado() {
+    const miEmpleado = new Empleado(this.nombre, this.apellido, this.cargo, this.salario);
+    this.empleados.push(miEmpleado);
   }
 }
