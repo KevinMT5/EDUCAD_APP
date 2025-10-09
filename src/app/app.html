@@ -1,40 +1,23 @@
-    <!--
-<div class="container mt-4">
-  <div class="row">
-Columna izquierda: Formulario
-    <div class="col-md-6">
-      <h2>{{titulo}}</h2>
-      <form (ngSubmit)="agregarEmpleado()">
-        <div class="mb-3">
-          <label for="nombre" class="form-label">Nombre</label>
-          <input type="text" class="form-control" id="nombre" [(ngModel)]="nombre" name="nombre">
-        </div>
-        <div class="mb-3">
-          <label for="apellido" class="form-label">Apellido</label>
-          <input type="text" class="form-control" id="apellido" [(ngModel)]="apellido" name="apellido">
-        </div>
-        <div class="mb-3">
-          <label for="cargo" class="form-label">Cargo</label>
-          <input type="text" class="form-control" id="cargo" [(ngModel)]="cargo" name="cargo">
-        </div>
-        <div class="mb-3">
-          <label for="salario" class="form-label">Salario</label>
-          <input type="number" class="form-control" id="salario" [(ngModel)]="salario" name="salario">
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Agregar Empleado</button>
-      </form>
-    </div>
-
-
-    <div class="col-md-6">
-      <h2>Lista de Empleados</h2>
-      <div *ngFor="let empleado of empleados; let i = index" class="border p-2 mb-2 rounded bg-light">
-        <strong>{{i+1}}.</strong> {{empleado.nombre}} {{empleado.apellido}}
-        <br>
-        <em>{{empleado.cargo}}</em> - ${{empleado.salario}}
-      </div>
-    </div>
+<nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+  <div class="container-fluid">
+    <!-- Contenido de la barra -->
+    <ul class="navbar-nav d-flex flex-row mb-0">
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="#">Inicio</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="#">Proyectos</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="#">Quiénes somos</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="#">Contacto</a>
+      </li>
+    </ul>
   </div>
-</div>
- -->
-<app-productos></app-productos>
+</nav>
+
+
+
+ <app-productos></app-productos>

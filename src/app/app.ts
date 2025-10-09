@@ -6,7 +6,7 @@ import { ProductosComponent } from './productos/productos';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule, NgForOf, ProductosComponent],
+  imports: [FormsModule, ProductosComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
