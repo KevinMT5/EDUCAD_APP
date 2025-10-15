@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Producto } from './producto.model';
 
+
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule ,],
   templateUrl: './productos.html',
   styleUrls: ['./productos.scss']
 })

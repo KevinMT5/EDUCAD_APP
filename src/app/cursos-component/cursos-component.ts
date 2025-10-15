@@ -2,16 +2,17 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-proyectos-component',
+  selector: 'app-cursos-component',
   imports: [],
-  templateUrl: './proyectos-component.html',
-  styleUrl: './proyectos-component.scss'
+  templateUrl: './cursos-component.html',
+  styleUrl: './cursos-component.scss'
 })
-export class ProyectosComponent {
+export class CursosComponent {
 
   constructor(private router: Router) { }
 
   volverHome() {
     this.router.navigate(['']);
   }
+
 }
