@@ -5,6 +5,7 @@ import { ProyectosComponent } from './proyectos-component/proyectos-component';
 import { QuienesComponent } from './quienes-component/quienes-component';
 import { ContactoComponent } from './contacto-component/contacto-component';
 import { CursosComponent } from './cursos-component/cursos-component';
+import { Lab4inventarioComponent } from './lab4inventario/lab4inventario';
 
 export const routes: Routes = [
 
@@ -12,9 +13,8 @@ export const routes: Routes = [
   {path: "proyectos",component: ProyectosComponent},
   {path: "quienes",component: QuienesComponent},
   {path: "contacto",component: ContactoComponent},
-  {path: "cursos",component: CursosComponent}
-
-
+  {path: "cursos",component: CursosComponent},
+  {path: "lab4inventario",component: Lab4inventarioComponent}
 ];
 
 
