@@ -1,37 +1,43 @@
 import { Component } from '@angular/core';
 import { CalculadoraImpuestosService } from '../calculadora.service';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-lab4inventario',
   imports: [FormsModule],
   templateUrl: './lab4inventario.html',
-  styleUrls: ['./lab4inventario.scss']
+  styleUrls: ['./lab4inventario.scss'],
 })
 export class Lab4inventarioComponent {
-
-  // Objeto para vincular con el formulario
   producto = {
     nombre: '',
     precioBase: 0,
-    categoria: ''
+    categoria: '',
   };
 
-  constructor(private calculadora: CalculadoraImpuestosService) { }
+  constructor(private calculadora: CalculadoraImpuestosService) {}
 
-  // Método que se ejecuta al enviar el formulario
   registrarProducto() {
-    const resultado = this.calculadora.calcularPrecioFinal(this.producto.precioBase, this.producto.categoria);
+    const resultado = this.calculadora.calcularPrecioFinal(
+      this.producto.precioBase,
+      this.producto.categoria
+    );
 
-    alert(`Detalle del Producto
-Nombre del Producto: ${this.producto.nombre}
-Categoría Aplicada: ${this.producto.categoria}
-Precio Base: $${this.producto.precioBase.toFixed(2)}
+   Swal.fire({
+  title: 'Detalle del Producto',
+  html: `
+    <strong>Nombre del Producto:</strong> ${this.producto.nombre}<br>
+    <strong>Categoría Aplicada:</strong> ${this.producto.categoria}<br>
+    <strong>Precio Base:</strong> $${this.producto.precioBase.toFixed(2)}<br><br>
+    <strong>Desglose de Costos:</strong><br>
+    <strong>Tasa de IVA Aplicada:</strong> ${resultado.tasaIVA}%<br>
+    <strong>Monto Total del IVA:</strong> $${resultado.montoIVA.toFixed(2)}<br>
+    <strong>Precio Final (Total a Pagar):</strong> $${resultado.precioFinal.toFixed(2)}
+  `,
+  icon: 'info',
+  confirmButtonText: 'Cerrar'
+});
 
-Desglose de Costos
-Tasa de IVA Aplicada: ${resultado.tasaIVA}%
-Monto Total del IVA: $${resultado.montoIVA.toFixed(2)}
-Precio Final (Total a Pagar): $${resultado.precioFinal.toFixed(2)}
-`);
   }
 }

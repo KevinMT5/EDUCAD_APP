@@ -18,7 +18,7 @@ export class CalculadoraImpuestosService {
         tasaIVA = 0.05;
         break;
       case 'Libros':
-        tasaIVA = 0; // Exento
+        tasaIVA = 0;
         break;
       default:
         tasaIVA = 0;
@@ -28,7 +28,7 @@ export class CalculadoraImpuestosService {
     const precioFinal = precioBase + montoIVA;
 
     return {
-      tasaIVA: tasaIVA * 100, // en porcentaje
+      tasaIVA: tasaIVA * 100,
       montoIVA,
       precioFinal
     };
