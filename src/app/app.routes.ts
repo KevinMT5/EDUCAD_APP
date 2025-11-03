@@ -1,20 +1,19 @@
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home-component/home-component';
-import { ProyectosComponent } from './proyectos-component/proyectos-component';
-import { QuienesComponent } from './quienes-component/quienes-component';
-import { ContactoComponent } from './contacto-component/contacto-component';
 import { CursosComponent } from './cursos-component/cursos-component';
-import { Lab4inventarioComponent } from './lab4inventario/lab4inventario';
+import { Shop } from './shop/shop';
+import { Error404 } from './pages/error404/error404';
+import { INICIO } from './inicio/inicio';
+
 
 export const routes: Routes = [
 
-  {path: "",component: HomeComponent},
-  {path: "proyectos",component: ProyectosComponent},
-  {path: "quienes",component: QuienesComponent},
-  {path: "contacto",component: ContactoComponent},
-  {path: "cursos",component: CursosComponent},
-  {path: "lab4inventario",component: Lab4inventarioComponent}
+  {path: "",component: INICIO},
+  {path: "shop",component: Shop},
+  {path: "cursos-component",component: CursosComponent},
+ // {path: "cursos-component2",component: CursosComponent2},
+  {path: "**",component: Error404},
+
 ];
 
 

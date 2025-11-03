@@ -1,20 +1,41 @@
-<div class="container mt-5">
-  <div class="card shadow-lg border-0">
-    <div class="card-body">
-      <h1 class="card-title text-center mb-4 text-primary">Cursos</h1>
-      <p class="text-center text-muted">Lista de cursos disponibles:</p>
+<div class="container mt-4">
+  <h3 class="mb-3">Gestión de Cursos</h3>
 
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">💻 Curso 1</li>
-        <li class="list-group-item">🎨 Curso 2</li>
-        <li class="list-group-item">📊 Curso 3</li>
-      </ul>
+  <!-- Formulario -->
+  <form (ngSubmit)="onAgregarCurso()" class="mb-4">
+    <div class="form-group">
+      <label>Nombre:</label>
+      <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
     </div>
-  </div>
-</div>
-<div class="text-center mt-4">
-  <button class="btn btn-primary" (click)="volverHome()">
-    VOLVER A HOME
-  </button>
 
+    <div class="form-group mt-2">
+      <label>Descripción:</label>
+      <input type="text" class="form-control" [(ngModel)]="descripcion" name="descripcion">
+    </div>
+
+    <div class="form-group mt-2">
+      <label>Duración:</label>
+      <input type="text" class="form-control" [(ngModel)]="duracion" name="duracion">
+    </div>
+
+    <div class="form-group mt-2">
+      <label>Precio:</label>
+      <input type="number" class="form-control" [(ngModel)]="precio" name="precio">
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Agregar Curso</button>
+  </form>
+
+  <!-- Listado -->
+  <h4>Cursos actuales:</h4>
+  <ul class="list-group">
+    <li *ngFor="let curso of cursos; let i = index" class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ curso.nombre }}</strong> ({{ curso.duracion }})<br>
+        <small>{{ curso.descripcion }}</small><br>
+        <span>Precio: ${{ curso.precio }}</span>
+      </div>
+      <button (click)="onEliminarCurso(i)" class="btn btn-danger btn-sm">Eliminar</button>
+    </li>
+  </ul>
 </div>
