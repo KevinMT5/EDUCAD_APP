@@ -1,0 +1,88 @@
+/* === 🎨 NAVBAR PERSONALIZADO === */
+.custom-navbar {
+  position: auto; /* fija arriba */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3000; /* siempre encima del hero o overlay */
+  background: linear-gradient(90deg, #111827 0%, #1f2937 50%, #111827 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  padding: 0.75rem 1rem;
+
+  .navbar-brand {
+    font-size: 1.4rem;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+
+    .logo-icon {
+      font-size: 1.6rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .nav-link {
+    position: relative;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    cursor: pointer;
+
+    &.active {
+      color: #ff4757 !important;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background: #ff4757;
+      transition: width 0.3s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  .btn-gradient {
+    background: linear-gradient(90deg, #ff4757, #ff6b81);
+    color: white;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(90deg, #ff6b81, #ff4757);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(255, 107, 129, 0.4);
+    }
+  }
+}
+
+/* ✨ Animación flotante para el ícono */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* === 🔧 FIX: Overlay del hero no bloquea clics === */
+.hero::after {
+  pointer-events: none; /* permite hacer clics debajo */
+}
+
+/* === 🔧 Padding para compensar navbar fija === */
+body {
+  padding-top: 72px; /* evita que el contenido quede oculto */
+}

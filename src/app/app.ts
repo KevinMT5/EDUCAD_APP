@@ -19,4 +19,9 @@ import { CommonModule } from '@angular/common';
 })
 export class App {
   titulo = 'EDUCADAPP';
+
+
+
+
+
 }

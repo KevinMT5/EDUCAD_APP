@@ -1,24 +1,48 @@
-<nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-  <div class="container-fluid">
-    <!-- Contenido de la barra -->
-    <ul class="navbar-nav d-flex flex-row mb-0">
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="">Inicio</a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="shop/">Shop</a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="cursos-component/">Cursos</a>
-      </li>
-      <li class="nav-item mx-2">
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="ubicanos/">Ubicanos</a>
-      </li>
-    </ul>
+<nav class="navbar navbar-expand-lg custom-navbar">
+  <div class="container-fluid px-4">
+    <!-- LOGO -->
+    <a class="navbar-brand fw-bold text-white d-flex align-items-center" routerLink="/inicio">
+      <span class="logo-icon me-2"></span>
+      <span class="logo-text">EDUCADD</span>
+    </a>
+
+    <!-- Botón móvil -->
+    <button
+      class="navbar-toggler text-white border-0"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Enlaces -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white nav-hover" href="/inicio">Inicio</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white nav-hover" href="/shop">Shop</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white nav-hover" href="/cursos-component">Cursos</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white nav-hover" href="/ubicanos">Ubícanos</a>
+        </li>
+        <li class="nav-item ms-3">
+          <a class="btn btn-gradient px-4 py-2 rounded-pill" href="/login">Ingresar</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
 
+
 <router-outlet></router-outlet>
+
+

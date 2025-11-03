@@ -8,10 +8,7 @@ import { DataServices } from "./data.services";
 })
 export class CursosService {
 
-  cursos: Course[] = [
-    new Course("Angular Básico", "Introducción a Angular", "10h", 50),
-    new Course("JavaScript Intermedio", "Lógica avanzada", "8h", 40)
-  ];
+  private cursos: Course[] = [];
 
   constructor(private dataService: DataServices) {}
 

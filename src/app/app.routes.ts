@@ -3,8 +3,7 @@ import { Routes } from '@angular/router';
 import { CursosComponent } from './cursos-component/cursos-component';
 import { Shop } from './shop/shop';
 import { Error404 } from './pages/error404/error404';
-import { INICIO } from './inicio/inicio';
-
+import { InicioComponent as INICIO } from './inicio/inicio';
 
 export const routes: Routes = [
 
