@@ -8,7 +8,7 @@ import { DataServices } from "./data.services";
 })
 export class CursosService {
 
-  private cursos: Course[] = [];
+  cursos: Course[] = [];
 
   constructor(private dataService: DataServices) {}
 
@@ -22,8 +22,19 @@ export class CursosService {
     return this.cursos;
   }
 
+  // Obtener una instantánea de los cursos actuales consumido desde el servicio de datos VV
+  obtenerCursos1(){
+    return this.dataService.cargar_Cursos();
+  }
+
+
+
+
   eliminarCurso(indice: number) {
     this.cursos.splice(indice, 1);
     this.dataService.guardarCursos(this.cursos);
+  }
+  setCursos(misCursos: Course[]) {
+    this.cursos = misCursos;
   }
 }
