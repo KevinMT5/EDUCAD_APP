@@ -13,8 +13,8 @@ export class DataServices {
     this.httpClient
       .put('https://educad-app1-default-rtdb.firebaseio.com/cursos.json', cursos)
       .subscribe(
-        response => console.log("✅ Cursos guardados correctamente", response),
-        error => console.log("❌ Error al guardar cursos:", error)
+        response => console.log("Cursos guardados correctamente", response),
+        error => console.log("Error al guardar cursos:", error)
       );
   }
   cargar_Cursos() {
@@ -22,4 +22,9 @@ export class DataServices {
       .get<Course[]>('https://educad-app1-default-rtdb.firebaseio.com/cursos.json');
   }
 
+  actualizar_cursos(indice: number, curso: Course) {
+    let url = 'https://educad-app1-default-rtdb.firebaseio.com/cursos/' + indice + '.json';
+    this.httpClient.put(url, curso).subscribe(response => console.log('Curso actualizado correctamente:', response),
+    error => console.log('Error al actualizar curso:', error));
+   }
 }

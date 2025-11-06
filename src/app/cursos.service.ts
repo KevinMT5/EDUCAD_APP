@@ -27,13 +27,17 @@ export class CursosService {
     return this.dataService.cargar_Cursos();
   }
 
-
-
-
+  //actualizavion de cursos en elk server y en arrat
+  actualizarCurso(indice: number, curso: Course) {
+    this.cursos[indice] = curso;
+    this.dataService.actualizar_cursos(indice, curso);
+  }
+//eliminacion de cursos cada uno
   eliminarCurso(indice: number) {
     this.cursos.splice(indice, 1);
     this.dataService.guardarCursos(this.cursos);
   }
+
   setCursos(misCursos: Course[]) {
     this.cursos = misCursos;
   }

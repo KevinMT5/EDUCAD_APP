@@ -5,6 +5,8 @@ import { FormsModule } from "@angular/forms";
 import { CursosService } from "../cursos.service";
 import { Course } from "./cursos.model";
 import { Subscription } from "rxjs";
+import Swal from 'sweetalert2'; // 👈 importa esto arriba del archivo
+
 
 @Component({
   selector: 'app-cursos-component',
@@ -131,6 +133,77 @@ export class CursosComponent implements OnInit, OnDestroy {
     this.duracion = '';
     this.precio = 0;
   }
+ async actualizarCurso(indice: number) {
+  const cursoExistente = this.cursos[indice];
+  if (!cursoExistente) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Curso no encontrado para actualizar.',
+    });
+    return;
+  }
+
+  // Mostrar formulario SweetAlert con los valores actuales
+  const { value: formValues } = await Swal.fire({
+    title: 'Actualizar curso',
+    html: `
+      <input id="nombre" class="swal2-input" placeholder="Nombre" value="${cursoExistente.nombre}">
+      <input id="descripcion" class="swal2-input" placeholder="Descripción" value="${cursoExistente.descripcion}">
+      <input id="duracion" class="swal2-input" placeholder="Duración" value="${cursoExistente.duracion}">
+      <input id="precio" type="number" class="swal2-input" placeholder="Precio" min="0" value="${cursoExistente.precio}">
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: 'Guardar cambios',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    preConfirm: () => {
+      const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
+      const descripcion = (document.getElementById('descripcion') as HTMLInputElement).value.trim();
+      const duracion = (document.getElementById('duracion') as HTMLInputElement).value.trim();
+      const precioStr = (document.getElementById('precio') as HTMLInputElement).value;
+      const precio = parseFloat(precioStr);
+
+      if (!nombre || !descripcion || !duracion || isNaN(precio)) {
+        Swal.showValidationMessage('Por favor completa todos los campos correctamente.');
+        return null;
+      }
+
+      return { nombre, descripcion, duracion, precio };
+    }
+  });
+  //modal
+
+
+  // Si el usuario confirmó y completó el formulario correctamente
+  if (formValues) {
+    cursoExistente.nombre = formValues.nombre;
+    cursoExistente.descripcion = formValues.descripcion;
+    cursoExistente.duracion = formValues.duracion;
+    cursoExistente.precio = formValues.precio;
+
+    // Actualizar en el servicio
+    if ((this.cursosService as any).actualizarCurso) {
+      (this.cursosService as any).actualizarCurso(indice, cursoExistente);
+    } else {
+      // fallback local
+      this.cursos[indice] = cursoExistente;
+      if ((this.cursosService as any).setCursos) {
+        (this.cursosService as any).setCursos(this.cursos);
+      }
+    }
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Curso actualizado!',
+      text: 'Los cambios se guardaron correctamente.',
+      timer: 1500,
+      showConfirmButton: false
+    });
+  }
+}
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
