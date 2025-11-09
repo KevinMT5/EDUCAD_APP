@@ -25,13 +25,9 @@ export class CursosComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   constructor(private cursosService: CursosService) {
-    // Mantengo tu línea original pero con protección: si el servicio no expone ese método,
-    // intento usar un snapshot alternativo (para evitar errores en tiempo de compilación/ejecución).
     if ((this.cursosService as any).obtenerCursos) {
       // Si existe obtenerCursos() que devuelve array directo (compatibilidad)
       try {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         this.cursos = this.cursosService.obtenerCursos() || [];
       } catch {
         this.cursos = [];
@@ -49,7 +45,6 @@ export class CursosComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Al iniciar, nos suscribimos al observable que provea cursos (si existe).
-    // Buscamos los nombres de métodos que podrías tener: obtenerCursos1(), cursos$ o data directo.
     if ((this.cursosService as any).obtenerCursos1) {
       // obtenerCursos1() -> asumo que devuelve Observable<Course[]>
       this.sub = (this.cursosService as any).obtenerCursos1().subscribe({
