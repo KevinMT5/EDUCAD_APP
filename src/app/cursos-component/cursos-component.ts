@@ -74,7 +74,6 @@ export class CursosComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Fallback: si el servicio tiene un método obtenerCursos() que devuelva Observable
     if ((this.cursosService as any).obtenerCursos) {
       try {
         const posible = (this.cursosService as any).obtenerCursos();

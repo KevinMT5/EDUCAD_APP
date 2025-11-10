@@ -37,16 +37,21 @@
       </div>
 
       <ul *ngIf="cursos.length > 0" class="list-group">
-        <li *ngFor="let curso of cursos; let i = index" class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <div>
-            <h5 class="fw-bold mb-1">{{ curso.nombre }}</h5>
-            <p class="mb-1">{{ curso.descripcion }}</p>
-            <small class="text-muted me-3">Duración: {{ curso.duracion }}</small>
-            <small class="text-primary fw-semibold">Precio: ${{ curso.precio }}</small>
-          </div>
-          <button class="btn btn-danger btn-sm mt-2 mt-md-0" (click)="onEliminarCurso(i)">Eliminar</button>
-          <button class="btn btn-warning btn-sm mt-2 mt-md-0" (click)="actualizarCurso(i)">Editar</button>
-        </li>
+        <li *ngFor="let curso of cursos; let i = index"
+    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+  <div>
+    <h5 class="fw-bold mb-1">{{ curso.nombre }}</h5>
+    <p class="mb-1">{{ curso.descripcion }}</p>
+    <small class="text-muted me-3">Duración: {{ curso.duracion }}</small>
+    <small class="text-primary fw-semibold">Precio: ${{ curso.precio }}</small>
+  </div>
+
+  <div class="d-flex gap-2 mt-2 mt-md-0">
+    <button class="btn btn-warning btn-sm" (click)="actualizarCurso(i)">Editar</button>
+    <button class="btn btn-danger btn-sm" (click)="onEliminarCurso(i)">Eliminar</button>
+  </div>
+</li>
+
       </ul>
     </div>
   </div>
