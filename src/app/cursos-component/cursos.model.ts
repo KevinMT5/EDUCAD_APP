@@ -6,7 +6,7 @@ export class Course {
   precio: number = 0;
 
 
-  constructor(nombre: string, descripcion: string, duracion: string, precio: number, categoria?: string, imagen?: string) {
+  constructor(nombre: string, descripcion: string, duracion: string, categoria: string, precio: number) {
     this.nombre = nombre;
     this.descripcion = descripcion;
     this.duracion = duracion;

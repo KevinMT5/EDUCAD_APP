@@ -19,6 +19,20 @@
     </div>
 
     <div class="form-group mt-2">
+      <label>Categoría:</label>
+      <select class="form-select" [(ngModel)]="categoria" name="categoria" required>
+        <option value="" disabled selected>Seleccione una categoría</option>
+        <option value="Mercadeo">Mercadeo</option>
+        <option value="Pedagogía">Pedagogía</option>
+        <option value="Programación">Programación</option>
+        <option value="Diseño Gráfico">Diseño Gráfico</option>
+        <option value="Desarrollo Personal">Desarrollo Personal</option>
+        <option value="Tecnología">Tecnología</option>
+      </select>
+    </div>
+
+
+    <div class="form-group mt-2">
       <label>Precio:</label>
       <input type="number" class="form-control" [(ngModel)]="precio" name="precio">
     </div>
@@ -28,7 +42,7 @@
 
   <!-- Listado -->
   <h4>Cursos actuales:</h4>
-    <div class="card shadow-sm">
+  <div class="card shadow-sm">
     <div class="card-body">
       <h5 class="card-title mb-3">Cursos disponibles</h5>
 
@@ -38,20 +52,24 @@
 
       <ul *ngIf="cursos.length > 0" class="list-group">
         <li *ngFor="let curso of cursos; let i = index"
-    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-  <div>
-    <h5 class="fw-bold mb-1">{{ curso.nombre }}</h5>
-    <p class="mb-1">{{ curso.descripcion }}</p>
-    <small class="text-muted me-3">Duración: {{ curso.duracion }}</small>
-    <small class="text-primary fw-semibold">Precio: ${{ curso.precio }}</small>
-  </div>
+            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+          <div>
+            <h5 class="fw-bold mb-1">{{ curso.nombre }}</h5>
+            <p class="mb-1">{{ curso.descripcion }}</p>
+            <div class="mb-1">
+              <small class="text-muted me-3">Duración: {{ curso.duracion }}</small>
+              <small class="text-primary fw-semibold">Precio: ${{ curso.precio }}</small>
+            </div>
+            <div>
+              <small class="badge bg-secondary">{{ curso.categoria }}</small>
+            </div>
+          </div>
 
-  <div class="d-flex gap-2 mt-2 mt-md-0">
-    <button class="btn btn-warning btn-sm" (click)="actualizarCurso(i)">Editar</button>
-    <button class="btn btn-danger btn-sm" (click)="onEliminarCurso(i)">Eliminar</button>
-  </div>
-</li>
-
+          <div class="d-flex gap-2 mt-2 mt-md-0">
+            <button class="btn btn-warning btn-sm" (click)="actualizarCurso(i)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="onEliminarCurso(i)">Eliminar</button>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
