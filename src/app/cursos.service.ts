@@ -30,7 +30,6 @@ export class CursosService {
     return this.cursos;
   }
 
-  // Obtener una instantánea de los cursos actuales consumido desde el servicio de datos VV
   obtenerCursos1(){
     return this.dataService.cargar_Cursos();
   }
