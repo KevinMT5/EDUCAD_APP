@@ -1,0 +1,66 @@
+/* src/app/cursos-component/cursos-component.scss */
+
+// Importa los iconos de Bootstrap si no están globalmente
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+$color-mercadeo: #007bff; // Azul primario
+$color-pedagogia: #28a745; // Verde éxito
+$color-tecnologia: #6f42c1; // Púrpura
+$color-arte: #fd7e14; // Naranja
+
+.curso-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .curso-tag {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        color: white;
+        display: inline-block;
+    }
+
+    .detail-block {
+        line-height: 1.1;
+    }
+}
+
+/* Colores y estilos dinámicos por Categoría */
+
+.curso-card[data-categoria="Mercadeo"] {
+    border-left: 5px solid $color-mercadeo !important;
+    .curso-tag {
+        background-color: $color-mercadeo;
+    }
+}
+
+.curso-card[data-categoria="Pedagogia"] {
+    border-left: 5px solid $color-pedagogia !important;
+    .curso-tag {
+        background-color: $color-pedagogia;
+    }
+}
+
+.curso-card[data-categoria="Tecnologia"] {
+    border-left: 5px solid $color-tecnologia !important;
+    .curso-tag {
+        background-color: $color-tecnologia;
+    }
+}
+
+.curso-card[data-categoria="Arte"] {
+    border-left: 5px solid $color-arte !important;
+    .curso-tag {
+        background-color: $color-arte;
+    }
+}
+
+/* Estilo para los botones de acción */
+.btn-outline-warning, .btn-outline-danger {
+    transition: all 0.3s ease;
+}
