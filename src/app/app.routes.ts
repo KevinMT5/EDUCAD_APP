@@ -5,6 +5,8 @@ import { Shop } from './shop/shop';
 import { Error404 } from './pages/error404/error404';
 import { InicioComponent as INICIO } from './inicio/inicio';
 import { LoginComponent } from './login-component/login-component';
+import { CursoDetalle } from './curso-detalle/curso-detalle';
+
 
 export const routes: Routes = [
 
@@ -13,6 +15,7 @@ export const routes: Routes = [
   {path: "cursos-component",component: CursosComponent},
   {path: "login-component",component: LoginComponent},
  // {path: "cursos-component2",component: CursosComponent2},
+  {path: "course/:id", component: CursoDetalle},
   {path: "**",component: Error404},
 
 ];

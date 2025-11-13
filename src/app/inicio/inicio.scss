@@ -1,52 +1,104 @@
+/* src/app/inicio/inicio.scss */
+
+// Definición de variables de color si no usas SCSS global
+$color-principal: #dc3545; // Rojo/danger de Bootstrap
+$color-secundario: #f8f9fa; // Gris claro
+$color-oscuro: #343a40; // Gris oscuro
+
+/* ==================================== */
+/* HERO SECTION: Banner de Pantalla Completa */
+/* ==================================== */
+
 .hero {
-  background: linear-gradient(to right, #111, #1e1e1e);
-  color: white;
-  height: 85vh;
-  padding: 3rem 1rem;
-background-image: url('/assets/banner.jpg');
-  background-size: cover;
-  background-position: center;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-  }
-
-  .container {
+    // Ajusta la altura para que ocupe la mayor parte de la pantalla
+    height: 80vh;
+    min-height: 500px;
     position: relative;
-    z-index: 2;
-  }
+    overflow: hidden;
 
-  h1 {
-    font-weight: 700;
-    letter-spacing: -1px;
-  }
+    // Fondo atractivo (Asegúrate de tener esta imagen en src/assets)
+    background-image: url('/assets/hero-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; // Efecto parallax ligero
 
-  p {
-    color: #ddd;
-    font-size: 1.2rem;
-  }
+    // Capa de oscuridad/filtro para que el texto blanco se lea mejor
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba($color-oscuro, 0.7); // 70% de opacidad
+        z-index: 1;
+    }
 
-  a.btn {
-    font-weight: 600;
-    text-transform: uppercase;
-  }
+    // Asegura que el contenido (texto y botón) esté por encima del filtro
+    > .container {
+        position: relative;
+        z-index: 2;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    h1, p {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    // Estilo del botón (invertido)
+    .btn-danger {
+        background-color: $color-principal;
+        border-color: $color-principal;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: darken($color-principal, 10%);
+            border-color: darken($color-principal, 10%);
+            transform: translateY(-2px);
+        }
+    }
+}
+
+
+/* ==================================== */
+/* CURSOS DESTACADOS: Tarjetas */
+/* ==================================== */
+
+section.container {
+    h2 {
+        color: $color-oscuro;
+        font-size: 2.5rem;
+    }
 }
 
 .card {
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    }
 
-  img {
-    height: 180px;
-    object-fit: cover;
-  }
+    .card-img-top {
+        height: 180px; // Altura fija para la imagen
+        object-fit: cover; // Asegura que la imagen cubra el espacio sin distorsionarse
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .card-title {
+        color: $color-principal;
+    }
+
+    .btn-outline-dark {
+        color: $color-oscuro;
+        border-color: $color-oscuro;
+
+        &:hover {
+            background-color: $color-oscuro;
+            color: $color-secundario;
+        }
+    }
 }
