@@ -16,8 +16,7 @@
   <div class="row g-4">
 
     <!-- Mostrar cursos del servicio -->
-    <div class="col-12 col-md-6 col-lg-4" *ngFor="let curso of cursosDestacados">
-      <div class="card border-0 shadow-sm h-100">
+<div class="col-12 col-md-6 col-lg-4" *ngFor="let curso of cursosDestacados; let i = index">      <div class="card border-0 shadow-sm h-100">
 
         <!-- Imagen dinámica con fallback -->
         <img
@@ -40,7 +39,8 @@
             Precio: ${{ curso.precio }}
           </p>
 
-          <a routerLink="/cursos" class="btn btn-outline-dark btn-sm mt-2">Ver más</a>
+      <a [routerLink]="['/course', i]" class="btn btn-outline-dark btn-sm mt-2">
+                   Ver más</a>
         </div>
       </div>
     </div>

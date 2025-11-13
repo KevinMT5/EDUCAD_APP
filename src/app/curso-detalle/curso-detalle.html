@@ -1,1 +1,63 @@
 <p>curso-detalle works!</p>
+<div class="container py-5">
+
+    <div *ngIf="!curso" class="alert alert-info text-center w-50 mx-auto shadow-sm">
+        <div class="spinner-border spinner-border-sm me-2" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        Cargando detalles del curso...
+    </div>
+
+    <div *ngIf="curso" class="row g-5">
+
+        <div class="col-lg-8">
+            <span class="badge bg-primary mb-2 fs-6 shadow-sm">{{ curso.categoria || 'General' }}</span>
+
+            <h1 class="display-5 fw-bold text-dark mb-3">{{ curso.nombre }}</h1>
+
+            <p class="lead text-muted">{{ curso.descripcion }}</p>
+
+            <hr class="my-4">
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center p-3 bg-light rounded shadow-sm">
+                        <i class="bi bi-clock-history fs-2 text-primary me-3"></i>
+                        <div>
+                            <div class="small text-muted">Duración</div>
+                            <div class="fw-bold fs-5">{{ curso.duracion || 'N/A' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center p-3 bg-light rounded shadow-sm">
+                        <i class="bi bi-cash-coin fs-2 text-success me-3"></i>
+                        <div>
+                            <div class="small text-muted">Precio</div>
+                            <div class="fw-bold fs-5">${{ curso.precio }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button (click)="comprarCurso()" class="btn btn-success btn-lg shadow-lg py-3 px-5">
+                <i class="bi bi-cart-fill me-2"></i> Inscribirse Ahora
+            </button>
+        </div>
+
+        <div class="col-lg-4">
+            <img
+
+                [alt]="curso.nombre"
+                class="img-fluid rounded shadow-lg sticky-top"
+                style="top: 20px;">
+        </div>
+    </div>
+
+    <div class="mt-5 pt-4 border-top">
+        <a routerLink="/shop" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i> Volver al Catálogo
+        </a>
+    </div>
+
+</div>
