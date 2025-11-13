@@ -1,12 +1,13 @@
 // src/app/cursos-component/cursos-component.ts
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { CursosService } from "../cursos.service";
 import { Course } from "./cursos.model";
 import { Subscription } from "rxjs";
-import Swal from 'sweetalert2'; // 👈 importa esto arriba del archivo
+import Swal from 'sweetalert2';
 
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-cursos-component',
@@ -15,87 +16,116 @@ import Swal from 'sweetalert2'; // 👈 importa esto arriba del archivo
   templateUrl: './cursos-component.html',
   styleUrls: ['./cursos-component.scss']
 })
-export class CursosComponent implements OnInit, OnDestroy {
+export class CursosComponent implements OnInit, AfterViewInit, OnDestroy {
+  // Form (add)
   nombre: string = '';
   descripcion: string = '';
   duracion: string = '';
   precio: number = 0;
+  categoria: string = 'Mercadeo';
 
+  // Edit
+  cursoEdit: any = {};
+  indiceEdit: number | null = null;
+
+  // Modal
+  modalEditar: any;
+
+  // Data
   cursos: Course[] = [];
   private sub?: Subscription;
 
-  constructor(private cursosService: CursosService) {
-    if ((this.cursosService as any).obtenerCursos) {
-      // Si existe obtenerCursos() que devuelve array directo (compatibilidad)
-      try {
-        this.cursos = this.cursosService.obtenerCursos() || [];
-      } catch {
-        this.cursos = [];
-      }
-    } else if ((this.cursosService as any).obtenerCursosSnapshot) {
-      // si hay obtenerCursosSnapshot() (snapshot sync)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.cursos = this.cursosService.obtenerCursosSnapshot() || [];
-    } else {
-      // dejar el array vacío hasta que ngOnInit lo llene vía observable
-      this.cursos = [];
-    }
-  }
+  constructor(private cursosService: CursosService, private cd: ChangeDetectorRef) {}
 
+  // -------------------------
+  // Inicialización y carga
+  // -------------------------
   ngOnInit(): void {
-    // Al iniciar, nos suscribimos al observable que provea cursos (si existe).
-    if ((this.cursosService as any).obtenerCursos1) {
-      // obtenerCursos1() -> asumo que devuelve Observable<Course[]>
-      this.sub = (this.cursosService as any).obtenerCursos1().subscribe({
-        next: (misCursos: Course[]) => {
-          console.log('misCursos', misCursos);
-          this.cursos = misCursos || [];
-          // si tu servicio tiene setCursos, actualizamos el snapshot central
-          if ((this.cursosService as any).setCursos) {
-            (this.cursosService as any).setCursos(this.cursos);
-          }
-        },
-        error: (err: any) => {
-          console.error('Error al obtener cursos (obtenerCursos1):', err);
-        }
-      });
-      return;
-    }
-
-    // Si el servicio expone un BehaviorSubject o cursos$ observable
+    // 1) Preferimos exponer cursos$ si existe
     if ((this.cursosService as any).cursos$) {
       this.sub = (this.cursosService as any).cursos$.subscribe({
         next: (list: Course[]) => {
-          this.cursos = list || [];
+          this.cursos = Array.isArray(list) ? list.slice() : [];
+          this._asegurarIdsYCategorias();
+          // Forzar render si es necesario
+          this.cd.detectChanges();
         },
         error: (err: any) => console.error('Error en cursos$:', err)
       });
       return;
     }
 
-    // Fallback: si el servicio tiene un método obtenerCursos() que devuelva Observable
+    // 2) Intentamos con obtenerCursos1() (nombres alternativos)
+    if ((this.cursosService as any).obtenerCursos1) {
+      try {
+        this.sub = (this.cursosService as any).obtenerCursos1().subscribe({
+          next: (list: Course[]) => {
+            this.cursos = Array.isArray(list) ? list.slice() : [];
+            this._asegurarIdsYCategorias();
+            this.cd.detectChanges();
+          },
+          error: (err: any) => console.error('Error obtenerCursos1():', err)
+        });
+        return;
+      } catch (err) {
+        console.warn('obtenerCursos1 existe pero al suscribir hubo error:', err);
+      }
+    }
+
+    // 3) Fallback: obtenerCursos() que puede devolver Observable o Array
     if ((this.cursosService as any).obtenerCursos) {
       try {
         const posible = (this.cursosService as any).obtenerCursos();
-        // si es observable, suscribimos; si es array, asignamos
         if (posible && typeof posible.subscribe === 'function') {
           this.sub = posible.subscribe({
-            next: (data: Course[]) => this.cursos = data || [],
-            error: (err: any) => console.error('Error al suscribir a obtenerCursos():', err)
+            next: (list: Course[]) => {
+              this.cursos = Array.isArray(list) ? list.slice() : [];
+              this._asegurarIdsYCategorias();
+              this.cd.detectChanges();
+            },
+            error: (err: any) => console.error('Error suscribiendo obtenerCursos():', err)
           });
-        } else {
-          this.cursos = posible || [];
+        } else if (Array.isArray(posible)) {
+          this.cursos = posible.slice();
+          this._asegurarIdsYCategorias();
         }
       } catch (err) {
-        console.error('Error intentando usar obtenerCursos fallback:', err);
+        console.error('Error llamando obtenerCursos():', err);
+      }
+      return;
+    }
+
+    // 4) Snapshot sync
+    if ((this.cursosService as any).obtenerCursosSnapshot) {
+      try {
+        // @ts-ignore
+        const snap = (this.cursosService as any).obtenerCursosSnapshot();
+        if (Array.isArray(snap)) {
+          this.cursos = snap.slice();
+          this._asegurarIdsYCategorias();
+        }
+      } catch (err) {
+        console.error('Error obtenerCursosSnapshot():', err);
       }
     }
   }
 
+  ngAfterViewInit(): void {
+    const modalEl = document.getElementById('modalEditarCurso');
+    if (modalEl) {
+      this.modalEditar = new bootstrap.Modal(modalEl);
+    } else {
+      console.warn('No se encontró el elemento #modalEditarCurso en el DOM.');
+    }
+  }
+
+
   onAgregarCurso() {
     const nuevoCurso = new Course(this.nombre, this.descripcion, this.duracion, this.precio);
-    // Si el servicio expone agregarCurso, lo usamos; si no, intentamos push local + set en servicio.
+
+    (nuevoCurso as any).id = this._generarId();
+    (nuevoCurso as any).categoria = this.categoria;
+
     if ((this.cursosService as any).agregarCurso) {
       (this.cursosService as any).agregarCurso(nuevoCurso);
     } else {
@@ -104,22 +134,35 @@ export class CursosComponent implements OnInit, OnDestroy {
         (this.cursosService as any).setCursos(this.cursos);
       }
     }
+
     this.limpiarFormulario();
   }
 
   onEliminarCurso(indice: number) {
-    // Intentamos llamar al nombre de método que exista
-    if ((this.cursosService as any).eliminarCurso) {
-      (this.cursosService as any).eliminarCurso(indice);
-    } else if ((this.cursosService as any).eliminarCursoPorIndice) {
-      (this.cursosService as any).eliminarCursoPorIndice(indice);
-    } else {
-      // fallback local
-      this.cursos.splice(indice, 1);
-      if ((this.cursosService as any).setCursos) {
-        (this.cursosService as any).setCursos(this.cursos);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if ((this.cursosService as any).eliminarCurso) {
+          (this.cursosService as any).eliminarCurso(indice);
+        } else if ((this.cursosService as any).eliminarCursoPorIndice) {
+          (this.cursosService as any).eliminarCursoPorIndice(indice);
+        } else {
+          this.cursos.splice(indice, 1);
+          if ((this.cursosService as any).setCursos) {
+            (this.cursosService as any).setCursos(this.cursos);
+          }
+        }
+        Swal.fire('Eliminado!', 'El curso ha sido eliminado.', 'success');
       }
-    }
+    });
   }
 
   limpiarFormulario() {
@@ -127,67 +170,55 @@ export class CursosComponent implements OnInit, OnDestroy {
     this.descripcion = '';
     this.duracion = '';
     this.precio = 0;
-  }
- async actualizarCurso(indice: number) {
-  const cursoExistente = this.cursos[indice];
-  if (!cursoExistente) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'Curso no encontrado para actualizar.',
-    });
-    return;
+    this.categoria = 'Mercadeo';
   }
 
-  // Mostrar formulario SweetAlert con los valores actuales
-  const { value: formValues } = await Swal.fire({
-    title: 'Actualizar curso',
-    html: `
-      <input id="nombre" class="swal2-input" placeholder="Nombre" value="${cursoExistente.nombre}">
-      <input id="descripcion" class="swal2-input" placeholder="Descripción" value="${cursoExistente.descripcion}">
-      <input id="duracion" class="swal2-input" placeholder="Duración" value="${cursoExistente.duracion}">
-      <input id="precio" type="number" class="swal2-input" placeholder="Precio" min="0" value="${cursoExistente.precio}">
-    `,
-    focusConfirm: false,
-    showCancelButton: true,
-    confirmButtonText: 'Guardar cambios',
-    cancelButtonText: 'Cancelar',
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    preConfirm: () => {
-      const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
-      const descripcion = (document.getElementById('descripcion') as HTMLInputElement).value.trim();
-      const duracion = (document.getElementById('duracion') as HTMLInputElement).value.trim();
-      const precioStr = (document.getElementById('precio') as HTMLInputElement).value;
-      const precio = parseFloat(precioStr);
+  actualizarCurso(indice: number) {
+    const curso = this.cursos[indice];
+    if (!curso) return;
 
-      if (!nombre || !descripcion || !duracion || isNaN(precio)) {
-        Swal.showValidationMessage('Por favor completa todos los campos correctamente.');
-        return null;
-      }
+    // copia para editar
+    this.cursoEdit = { ...curso };
+    this.indiceEdit = indice;
 
-      return { nombre, descripcion, duracion, precio };
+    if (this.modalEditar) {
+      this.modalEditar.show();
+    } else {
+      console.warn('Modal no inicializado; no se puede abrir.');
     }
-  });
-  //modal
+  }
 
+  guardarCambios() {
+    if (this.indiceEdit === null) return;
 
-  // Si el usuario confirmó y completó el formulario correctamente
-  if (formValues) {
-    cursoExistente.nombre = formValues.nombre;
-    cursoExistente.descripcion = formValues.descripcion;
-    cursoExistente.duracion = formValues.duracion;
-    cursoExistente.precio = formValues.precio;
+    // Validación
+    if (!this.cursoEdit.nombre || !this.cursoEdit.descripcion || !this.cursoEdit.duracion ||
+        this.cursoEdit.precio === null || this.cursoEdit.precio === '' || this.cursoEdit.precio < 0 ||
+        !this.cursoEdit.categoria) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de Validación',
+        text: 'Por favor completa todos los campos correctamente, incluyendo la categoría.'
+      });
+      return;
+    }
 
-    // Actualizar en el servicio
+    const indice = this.indiceEdit;
+    this.cursoEdit.precio = Number(this.cursoEdit.precio);
+
+    // Delegar actualización al servicio si existe
     if ((this.cursosService as any).actualizarCurso) {
-      (this.cursosService as any).actualizarCurso(indice, cursoExistente);
+      (this.cursosService as any).actualizarCurso(indice, this.cursoEdit);
     } else {
       // fallback local
-      this.cursos[indice] = cursoExistente;
+      this.cursos[indice] = { ...this.cursoEdit };
       if ((this.cursosService as any).setCursos) {
         (this.cursosService as any).setCursos(this.cursos);
       }
+    }
+
+    if (this.modalEditar) {
+      this.modalEditar.hide();
     }
 
     Swal.fire({
@@ -197,8 +228,37 @@ export class CursosComponent implements OnInit, OnDestroy {
       timer: 1500,
       showConfirmButton: false
     });
+
+    this.indiceEdit = null;
+    this.cursoEdit = {};
   }
-}
+
+  // -------------------------
+  // Utilidades internas
+  // -------------------------
+  private _generarId(): string {
+    // usa crypto.randomUUID cuando esté disponible, si no fallback a Date.now+random
+    try {
+      // @ts-ignore
+      if (typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function') {
+        // @ts-ignore
+        return (crypto as any).randomUUID();
+      }
+    } catch (e) {
+      // no pasa nada, caemos al fallback
+    }
+    return String(Date.now()) + '-' + Math.floor(Math.random() * 1000000);
+  }
+
+  private _asegurarIdsYCategorias() {
+    // Recorre cursos y agrega id/categoria por compatibilidad si faltan
+    this.cursos = this.cursos.map((c: any) => {
+      const copia = { ...c } as any;
+      if (!copia.id) copia.id = this._generarId();
+      if (!copia.categoria) copia.categoria = 'Sin categoría';
+      return copia;
+    });
+  }
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();

@@ -1,4 +1,4 @@
-<!-- src/app/inicio/inicio.html -->
+<!-- HERO -->
 <section class="hero d-flex flex-column align-items-center justify-content-center text-center text-light">
   <div class="container">
     <h1 class="display-4 fw-bold mb-3">Aprende lo que amas en EDUCADD</h1>
@@ -9,23 +9,41 @@
   </div>
 </section>
 
+<!-- CURSOS DESTACADOS -->
 <section class="container py-5">
   <h2 class="fw-bold text-center mb-4">Cursos destacados</h2>
 
   <div class="row g-4">
-    <div class="col-12 col-md-6 col-lg-4" *ngFor="let curso of [
-        { nombre: 'Diseño Gráfico Creativo', imagen: '/assets/curso1.jpg', categoria: 'Diseño' },
-        { nombre: 'Fotografía Profesional', imagen: '/assets/curso2.jpg', categoria: 'Fotografía' },
-        { nombre: 'Desarrollo Web con Angular', imagen: '/assets/curso3.jpg', categoria: 'Tecnología' }
-      ]">
+
+    <!-- Mostrar cursos del servicio -->
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let curso of cursosDestacados">
       <div class="card border-0 shadow-sm h-100">
-        <img [src]="curso.imagen" class="card-img-top" alt="{{ curso.nombre }}">
+
+        <!-- Imagen dinámica con fallback -->
+        <img
+          [src]="obtenerImagen(curso)"
+          (error)="onImgError($event)"
+          class="card-img-top"
+          alt="{{ curso.nombre }}"
+        >
+
         <div class="card-body">
           <h5 class="card-title fw-bold">{{ curso.nombre }}</h5>
-          <p class="text-muted mb-1">{{ curso.categoria }}</p>
+
+          <!-- Categoría (si existe) -->
+          <p class="text-muted mb-1">
+            {{ curso.categoria || 'Sin categoría' }}
+          </p>
+
+          <!-- Precio (si existe) -->
+          <p class="fw-semibold mb-1" *ngIf="curso.precio !== undefined">
+            Precio: ${{ curso.precio }}
+          </p>
+
           <a routerLink="/cursos" class="btn btn-outline-dark btn-sm mt-2">Ver más</a>
         </div>
       </div>
     </div>
+
   </div>
 </section>

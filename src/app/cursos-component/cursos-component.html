@@ -1,53 +1,187 @@
+<!-- src/app/cursos-component/cursos-component.html -->
 <div class="container mt-4">
   <h3 class="mb-3">Gestión de Cursos</h3>
 
-  <!-- Formulario -->
-  <form (ngSubmit)="onAgregarCurso()" class="mb-4">
-    <div class="form-group">
-      <label>Nombre:</label>
-      <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
-    </div>
-
-    <div class="form-group mt-2">
-      <label>Descripción:</label>
-      <input type="text" class="form-control" [(ngModel)]="descripcion" name="descripcion">
-    </div>
-
-    <div class="form-group mt-2">
-      <label>Duración:</label>
-      <input type="text" class="form-control" [(ngModel)]="duracion" name="duracion">
-    </div>
-
-    <div class="form-group mt-2">
-      <label>Precio:</label>
-      <input type="number" class="form-control" [(ngModel)]="precio" name="precio">
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Agregar Curso</button>
-  </form>
-
-  <!-- Listado -->
-  <h4>Cursos actuales:</h4>
-    <div class="card shadow-sm">
+  <!-- Formulario (mismo comportamiento, estilo mejorado) -->
+  <div class="card mb-4 shadow-sm">
     <div class="card-body">
-      <h5 class="card-title mb-3">Cursos disponibles</h5>
+      <form (ngSubmit)="onAgregarCurso()" class="row g-3 align-items-end">
+        <div class="col-12 col-md-6">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input id="nombre" name="nombre" type="text" class="form-control form-control-lg"
+                 [(ngModel)]="nombre" required placeholder="Nombre del curso">
+        </div>
 
-      <div *ngIf="cursos.length === 0" class="text-center text-muted py-4">
-        <p class="mb-0">No hay cursos registrados aún.</p>
-      </div>
+        <div class="col-12 col-md-6">
+          <label for="categoria" class="form-label">Categoría</label>
+          <select id="categoria" name="categoria" class="form-select"
+                  [(ngModel)]="categoria" required>
+            <option value="Mercadeo">Mercadeo</option>
+            <option value="Pedagogia">Pedagogia</option>
+            <option value="Tecnologia">Tecnologia</option>
+            <option value="Diseno">Diseno</option>
+            <option value="Fotografia">Fotografia</option>
+          </select>
+        </div>
 
-      <ul *ngIf="cursos.length > 0" class="list-group">
-        <li *ngFor="let curso of cursos; let i = index" class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <div>
-            <h5 class="fw-bold mb-1">{{ curso.nombre }}</h5>
-            <p class="mb-1">{{ curso.descripcion }}</p>
-            <small class="text-muted me-3">Duración: {{ curso.duracion }}</small>
-            <small class="text-primary fw-semibold">Precio: ${{ curso.precio }}</small>
+        <div class="col-12 col-md-6">
+          <label for="precio" class="form-label">Precio</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input id="precio" name="precio" type="number" class="form-control"
+                   [(ngModel)]="precio" placeholder="0.00" step="0.01" min="0">
           </div>
-          <button class="btn btn-danger btn-sm mt-2 mt-md-0" (click)="onEliminarCurso(i)">Eliminar</button>
-          <button class="btn btn-warning btn-sm mt-2 mt-md-0" (click)="actualizarCurso(i)">Editar</button>
-        </li>
-      </ul>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <input id="descripcion" name="descripcion" type="text" class="form-control"
+                 [(ngModel)]="descripcion" placeholder="Breve descripción">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="duracion" class="form-label">Duración</label>
+          <input id="duracion" name="duracion" type="text" class="form-control"
+                 [(ngModel)]="duracion" placeholder="Ej: 20 horas / 4 semanas">
+        </div>
+
+        <div class="col-12 col-md-2 d-grid">
+          <button type="submit" class="btn btn-primary btn-lg">Agregar Curso</button>
+        </div>
+      </form>
     </div>
   </div>
+
+  <!-- Listado -->
+  <h4 class="mb-3">Cursos actuales</h4>
+
+  <div *ngIf="cursos.length === 0" class="card shadow-sm mb-3">
+    <div class="card-body text-center text-muted py-4">
+      <p class="mb-0">No hay cursos registrados aún.</p>
+    </div>
+  </div>
+
+  <div *ngIf="cursos.length > 0" class="row g-3">
+    <div *ngFor="let curso of cursos; let i = index" class="col-12 col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <h5 class="card-title mb-1">{{ curso.nombre }}</h5>
+              <p class="card-text mb-1 text-muted small">{{ curso.descripcion || '—' }}</p>
+              <div class="small text-muted">Categoría: <span class="fw-semibold">{{ curso.categoria || '—' }}</span></div>
+            </div>
+            <div class="text-end">
+              <div class="small text-muted">Duración</div>
+              <div class="fw-semibold">{{ curso.duracion || '—' }}</div>
+            </div>
+          </div>
+
+          <div class="mt-auto d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-light text-dark fs-6">
+                Precio: <span class="fw-bold ms-1">${{ curso.precio }}</span>
+              </span>
+            </div>
+
+            <div class="btn-group">
+              <button class="btn btn-sm btn-warning" type="button" (click)="actualizarCurso(i)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-danger" type="button" (click)="onEliminarCurso(i)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Modal Editar Curso        -->
+  <!-- ========================= -->
+  <div class="modal fade" id="modalEditarCurso" tabindex="-1" aria-labelledby="modalEditarCursoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarCursoLabel">Editar curso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <form class="row g-3" (ngSubmit)="guardarCambios()">
+
+            <div class="col-12">
+              <label for="editNombre" class="form-label">Nombre</label>
+              <input id="editNombre" name="editNombre" type="text" class="form-control"
+                     [(ngModel)]="cursoEdit.nombre" required>
+            </div>
+
+            <div class="col-12">
+              <label for="editCategoria" class="form-label">Categoría</label>
+              <select id="editCategoria" name="editCategoria" class="form-select"
+                      [(ngModel)]="cursoEdit.categoria" required>
+                <option value="Mercadeo">Mercadeo</option>
+                <option value="Pedagogia">Pedagogia</option>
+                <option value="Tecnologia">Tecnologia</option>
+                <option value="Diseno">Diseno</option>
+                <option value="Fotografia">Fotografia</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label for="editDescripcion" class="form-label">Descripción</label>
+              <input id="editDescripcion" name="editDescripcion" type="text" class="form-control"
+                     [(ngModel)]="cursoEdit.descripcion" required>
+            </div>
+
+            <div class="col-12">
+              <label for="editDuracion" class="form-label">Duración</label>
+              <input id="editDuracion" name="editDuracion" type="text" class="form-control"
+                     [(ngModel)]="cursoEdit.duracion" required>
+            </div>
+
+            <div class="col-12">
+              <label for="editPrecio" class="form-label">Precio</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input id="editPrecio" name="editPrecio" type="number" class="form-control"
+                       [(ngModel)]="cursoEdit.precio" required min="0" step="0.01">
+              </div>
+            </div>
+
+            <!-- botón fantasma para permitir Enter -->
+            <button type="submit" class="d-none" aria-hidden="true">Guardar</button>
+
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+          <!-- Validación sin isNaN -->
+          <button type="button"
+                  class="btn btn-primary"
+                  [disabled]="
+                    !cursoEdit?.nombre ||
+                    !cursoEdit?.descripcion ||
+                    !cursoEdit?.duracion ||
+                    cursoEdit?.precio === null ||
+                    cursoEdit?.precio === '' ||
+                    cursoEdit?.precio < 0 ||
+                    !cursoEdit?.categoria
+                  "
+                  (click)="guardarCambios()">
+            Guardar cambios
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
