@@ -1,0 +1,70 @@
+/* src/app/curso-detalle/curso-detalle.scss */
+
+/* (Opcional) Importa los iconos de Bootstrap si no están globales */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+// --- Variables de Color ---
+// (Usamos los colores de Bootstrap para consistencia)
+$primary-color: #0d6efd;
+$success-color: #198754;
+$secondary-color: #6c757d;
+
+/* Asegura que el componente ocupe su espacio */
+:host {
+  display: block;
+}
+
+/* --- Estilos de la Página de Detalle --- */
+
+/* Título (ya es grande, pero aseguramos el color) */
+.display-5 {
+  color: #212529; // Un negro más suave que el default
+}
+
+/* Insignia de Categoría (un poco más grande) */
+.badge.bg-primary {
+  font-size: 0.9rem;
+  padding: 0.6em 1em;
+  background-color: $primary-color !important;
+}
+
+/* Cajas de Detalles (Duración y Precio) */
+.bg-light.rounded {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #eee;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  }
+}
+
+/* Imagen del Curso (sticky y con sombra) */
+.img-fluid.sticky-top {
+  border: 1px solid #eee;
+  /* La clase 'shadow-lg' de Bootstrap ya hace un buen trabajo */
+  /* Opcional: sombra más profunda */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Botón de "Inscribirse Ahora" (CTA principal) */
+.btn-success {
+  transition: all 0.3s ease;
+  border-width: 2px;
+
+  &:hover {
+    transform: translateY(-3px);
+    // Genera una sombra genial basada en el color de éxito
+    box-shadow: 0 6px 20px rgba($success-color, 0.4) !important;
+  }
+}
+
+/* Botón de "Volver al Catálogo" */
+.btn-outline-secondary {
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $secondary-color;
+    color: white;
+  }
+}

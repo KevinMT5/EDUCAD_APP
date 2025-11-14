@@ -22,7 +22,8 @@ export class CursosComponent implements OnInit, AfterViewInit, OnDestroy {
   descripcion: string = '';
   duracion: string = '';
   precio: number = 0;
-  categoria: string = 'Mercadeo';
+  categoria: string = '';
+  imagenUrl: string = '';
 
   // Edit
   cursoEdit: any = {};
@@ -124,7 +125,7 @@ export class CursosComponent implements OnInit, AfterViewInit, OnDestroy {
   // -------------------------
   onAgregarCurso() {
     // crear instancia manteniendo compatibilidad con Course
-    const nuevoCurso = new Course(this.nombre, this.descripcion, this.duracion, this.categoria, this.precio);
+    const nuevoCurso = new Course(this.nombre, this.descripcion, this.duracion, this.categoria, this.precio, this.imagenUrl);
 
     // asignar id único si no existe
     (nuevoCurso as any).id = this._generarId();
