@@ -1,3 +1,5 @@
+import { LoginService } from './login.service';
+import { Router } from '@angular/router';
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Course } from "./cursos-component/cursos.model";
@@ -7,7 +9,7 @@ import { Course } from "./cursos-component/cursos.model";
   providedIn: 'root'
 })
 export class DataServices {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private Router : Router, private LoginService: LoginService) {}
 
   guardarCursos(cursos: Course[]) {
     this.httpClient
